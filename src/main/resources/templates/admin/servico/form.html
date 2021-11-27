@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html th:replace="~{adminlte3 :: layout (~{::title}, ~{::main}, _, _)}">
+<html
+  th:replace="~{adminlte3 :: layout (~{::title}, ~{::main}, _, ~{::scripts})}"
+>
   <head>
     <title>Formulário de Serviço</title>
   </head>
@@ -36,8 +38,8 @@
                     <div class="form-group">
                       <label for="valorMinimo">Valor Mínimo</label>
                       <input
-                        type="number"
-                        class="form-control"
+                        type="text"
+                        class="form-control money"
                         th:field="*{valorMinimo}"
                       />
                       <ul>
@@ -76,8 +78,8 @@
                         >Porcetagem Comissão</label
                       >
                       <input
-                        type="number"
-                        class="form-control"
+                        type="text"
+                        class="form-control money"
                         th:field="*{porcentagemComissao}"
                       />
                       <ul>
@@ -114,8 +116,8 @@
                     <div class="form-group">
                       <label for="valorQuarto">Valor Quarto</label>
                       <input
-                        type="number"
-                        class="form-control"
+                        type="text"
+                        class="form-control money"
                         th:field="*{valorQuarto}"
                       />
                       <ul>
@@ -152,8 +154,8 @@
                     <div class="form-group">
                       <label for="valorSala">Valor Sala</label>
                       <input
-                        type="number"
-                        class="form-control"
+                        type="text"
+                        class="form-control money"
                         th:field="*{valorSala}"
                       />
                       <ul>
@@ -190,8 +192,8 @@
                     <div class="form-group">
                       <label for="valorBanheiro">Valor Banheiro</label>
                       <input
-                        type="number"
-                        class="form-control"
+                        type="text"
+                        class="form-control money"
                         th:field="*{valorBanheiro}"
                       />
                       <ul>
@@ -228,8 +230,8 @@
                     <div class="form-group">
                       <label for="valorCozinha">Valor Cozinha</label>
                       <input
-                        type="number"
-                        class="form-control"
+                        type="text"
+                        class="form-control money"
                         th:field="*{valorCozinha}"
                       />
                       <ul>
@@ -266,8 +268,8 @@
                     <div class="form-group">
                       <label for="valorQuintal">Valor Quintal</label>
                       <input
-                        type="number"
-                        class="form-control"
+                        type="text"
+                        class="form-control money"
                         th:field="*{valorQuintal}"
                       />
                       <ul>
@@ -304,8 +306,8 @@
                     <div class="form-group">
                       <label for="valorOutros">Valor Outros</label>
                       <input
-                        type="number"
-                        class="form-control"
+                        type="text"
+                        class="form-control money"
                         th:field="*{valorOutros}"
                       />
                       <ul>
@@ -367,5 +369,16 @@
         </div>
       </div>
     </main>
+
+    <th:block th:fragment="scripts">
+      <script
+        th:src="@{/webjars/jquery-mask-plugin/dist/jquery.mask.min.js}"
+      ></script>
+      <script>
+        $(document).ready(function () {
+          $(".money").mask("#.##0,00", { reverse: true });
+        });
+      </script>
+    </th:block>
   </body>
 </html>

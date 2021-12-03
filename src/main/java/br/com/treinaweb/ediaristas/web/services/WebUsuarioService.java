@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.FieldError;
 
 import br.com.treinaweb.ediaristas.core.enums.TipoUsuario;
+import br.com.treinaweb.ediaristas.core.exceptions.SenhasNaoConferemException;
 import br.com.treinaweb.ediaristas.core.exceptions.UsuairoNaoEncontradoException;
+import br.com.treinaweb.ediaristas.core.exceptions.UsuarioCadastradoException;
 import br.com.treinaweb.ediaristas.core.models.Usuario;
 import br.com.treinaweb.ediaristas.core.repositories.UsuarioRepository;
 import br.com.treinaweb.ediaristas.web.dtos.UsuarioCadastroForm;
@@ -27,8 +30,24 @@ public class WebUsuarioService {
     }
 
     public Usuario cadastrar(UsuarioCadastroForm form) {
+        var senha = form.getSenha();
+        var confirmacaoSenha = form.getConfirmacaoSenha();
+
+        if (!senha.equals(confirmacaoSenha)) {
+            var mensagem = "Os dois campos de senhas não são iguais";
+            var fieldError = new FieldError(
+                    form.getClass().getName(),
+                    "confirmacaoSenha",
+                    form.getConfirmacaoSenha(),
+                    false, null, null, mensagem);
+            throw new SenhasNaoConferemException(mensagem, fieldError);
+        }
+
         var model = mapper.toModel(form);
         model.setTipoUsuario(TipoUsuario.ADMIN);
+
+        validarCamposUnicos(model);
+
         return repository.save(model);
     }
 
@@ -50,6 +69,8 @@ public class WebUsuarioService {
         model.setTipoUsuario(usuario.getTipoUsuario());
         model.setSenha(usuario.getSenha());
 
+        validarCamposUnicos(model);
+
         return repository.save(model);
     }
 
@@ -58,4 +79,15 @@ public class WebUsuarioService {
         repository.delete(usuario);
     }
 
+    private void validarCamposUnicos(Usuario usuario) {
+        if (repository.isEmailJaCadastrado(usuario.getEmail(), usuario.getId())) {
+            var mensagem = "Já existe um usuário cadastrado com esse e-mail";
+            var fieldError = new FieldError(
+                    usuario.getClass().getName(),
+                    "email",
+                    usuario.getEmail(),
+                    false, null, null, mensagem);
+            throw new UsuarioCadastradoException(mensagem, fieldError);
+        }
+    }
 }

@@ -3,6 +3,7 @@ package br.com.treinaweb.ediaristas.web.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.FieldError;
 
@@ -25,6 +26,11 @@ public class WebUsuarioService {
     @Autowired
     private WebUsuarioMapper mapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    // ---------------------------------------------------------------
+
     public List<Usuario> buscarTodos() {
         return repository.findAll();
     }
@@ -44,6 +50,8 @@ public class WebUsuarioService {
         }
 
         var model = mapper.toModel(form);
+
+        model.setSenha(passwordEncoder.encode(model.getSenha()));
         model.setTipoUsuario(TipoUsuario.ADMIN);
 
         validarCamposUnicos(model);

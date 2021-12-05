@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>App Name | Log in</title>
+  <title>E-Diaristas | Log in</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -21,16 +21,20 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    App Name
+    E-Diaristas
   </div>
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">Entre com suas credenciais para iniciar a seção</p>
 
-      <form method="POST">
+      <div class="alert alert-danger" th:if="${param.error != null}">
+        <span th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}"></span>
+      </div>
+
+      <form method="POST" th:action="@{/admin/login}">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Username" name="username" required>
+          <input type="text" class="form-control" placeholder="E-mail" name="email" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
@@ -38,7 +42,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password" name="password" required>
+          <input type="password" class="form-control" placeholder="Senha" name="senha" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>

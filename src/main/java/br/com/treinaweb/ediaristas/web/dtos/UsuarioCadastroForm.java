@@ -6,6 +6,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import br.com.treinaweb.ediaristas.web.interfaces.IConfirmacaoSenha;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioCadastroForm {
+public class UsuarioCadastroForm implements IConfirmacaoSenha {
 
     @NotBlank
     @Size(min = 3, max = 25)
